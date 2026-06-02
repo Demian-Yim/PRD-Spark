@@ -1,0 +1,59 @@
+{
+  "entities": {
+    "PRDDocument": {
+      "title": "PRDDocument",
+      "description": "학습자가 생성한 앱 기획서(PRD)의 데이터 모델",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "PRD 문서 고유 ID"
+        },
+        "company": {
+          "type": "string",
+          "description": "입력한 회사명"
+        },
+        "jobTitle": {
+          "type": "string",
+          "description": "입력한 직무"
+        },
+        "jobLevel": {
+          "type": "string",
+          "description": "입력한 직급"
+        },
+        "issue": {
+          "type": "string",
+          "description": "입력한 핵심 이슈"
+        },
+        "title": {
+          "type": "string",
+          "description": "AI가 추출하거나 생성한 PRD 프로젝트 제목"
+        },
+        "markdown": {
+          "type": "string",
+          "description": "AI가 생성한 마크다운 문서 전문"
+        },
+        "createdBy": {
+          "type": "string",
+          "description": "생성자 이메일 또는 익명 식별자"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "문서 생성 일시"
+        },
+        "isPublic": {
+          "type": "boolean",
+          "description": "공유 여부"
+        }
+      },
+      "required": ["id", "company", "jobTitle", "jobLevel", "issue", "title", "markdown", "createdAt", "isPublic"]
+    }
+  },
+  "firestore": {
+    "/prds/{prdId}": {
+      "schema": "PRDDocument",
+      "description": "PRD 문서들을 저장하는 Root 컬렉션"
+    }
+  }
+}

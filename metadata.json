@@ -1,0 +1,12 @@
+{
+  "name": "PRD Spark",
+  "description": "회사명, 직무, 직급, 핵심 이슈만으로 30초 만에 대기업 실무자 수준의 완벽한 앱 PRD를 자동 완성하고, Firestore 저장 및 실시간 공유를 지원하는 기업 특화 기획 가속 플랫폼 (Developed by Demian 임정훈)",
+  "requestFramePermissions": [
+    "microphone",
+    "camera",
+    "geolocation"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

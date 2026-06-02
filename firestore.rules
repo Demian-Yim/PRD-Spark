@@ -1,0 +1,45 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isValidId(id) { 
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); 
+    }
+    
+    function isSignedIn() { 
+      return request.auth != null; 
+    }
+
+    function isValidPRD(data) {
+      return data.id is string
+        && data.company is string && data.company.size() <= 200
+        && data.jobTitle is string && data.jobTitle.size() <= 200
+        && data.jobLevel is string && data.jobLevel.size() <= 100
+        && data.issue is string && data.issue.size() <= 5000
+        && data.title is string && data.title.size() <= 500
+        && data.markdown is string && data.markdown.size() <= 100000
+        && data.isPublic is bool;
+    }
+
+    match /prds/{prdId} {
+      // 단일 문서 및 목록 조회 규칙
+      allow get: if resource == null || resource.data.isPublic == true || (isSignedIn() && resource.data.createdBy == request.auth.token.email);
+      allow list: if resource == null || resource.data.isPublic == true || (isSignedIn() && resource.data.createdBy == request.auth.token.email);
+      
+      // 생성 규칙
+      allow create: if isValidId(prdId) && isValidPRD(request.resource.data);
+      
+      // 업데이트 규칙
+      allow update: if isValidId(prdId) && isValidPRD(request.resource.data) && (
+        !resource.data.keys().hasAll(['createdBy']) || 
+        resource.data.createdBy == request.resource.data.createdBy
+      );
+      
+      // 삭제 규칙
+      allow delete: if isSignedIn() && resource.data.createdBy == request.auth.token.email;
+    }
+  }
+}

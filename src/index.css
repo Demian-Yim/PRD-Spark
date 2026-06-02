@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Space Grotesk", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  /* Pastel color palette - 4도 이상의 예쁜 파스텔 톤 컬러 정의 */
+  --color-pastel-blue-light: #e0f2fe;
+  --color-pastel-blue: #bae6fd;
+  --color-pastel-blue-dark: #0369a1;
+
+  --color-pastel-green-light: #dcfce7;
+  --color-pastel-green: #bbf7d0;
+  --color-pastel-green-dark: #15803d;
+
+  --color-pastel-purple-light: #f3e8ff;
+  --color-pastel-purple: #e9d5ff;
+  --color-pastel-purple-dark: #7e22ce;
+
+  --color-pastel-pink-light: #fce7f3;
+  --color-pastel-pink: #fbcfe8;
+  --color-pastel-pink-dark: #be185d;
+
+  --color-pastel-yellow-light: #fef9c3;
+  --color-pastel-yellow: #fef08a;
+  --color-pastel-yellow-dark: #a16207;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.3);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(156, 163, 175, 0.5);
+}
+
+body {
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+}
