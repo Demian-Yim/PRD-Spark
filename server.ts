@@ -3,13 +3,12 @@ import path from "path";
 import { createServer as createViteServer } from "vite";
 import { GoogleGenAI } from "@google/genai";
 
-async function startServer() {
-  const app = express();
-  const PORT = 3000;
+const app = express();
+const PORT = 3000;
 
-  // Body parser limit increase for handling markdown contents
-  app.use(express.json({ limit: "10mb" }));
-  app.use(express.urlencoded({ extended: true, limit: "10mb" }));
+// Body parser limit increase for handling markdown contents
+app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
   // API endpoint for PRD Generation
   app.post("/api/generate-prd", async (req, res) => {
@@ -127,23 +126,29 @@ async function startServer() {
   });
 
   // Serve static files in production or delegate to Vite in development
-  if (process.env.NODE_ENV !== "production") {
-    const vite = await createViteServer({
-      server: { middlewareMode: true },
-      appType: "spa",
-    });
-    app.use(vite.middlewares);
-  } else {
-    const distPath = path.join(process.cwd(), "dist");
-    app.use(express.static(distPath));
-    app.get("*", (req, res) => {
-      res.sendFile(path.join(distPath, "index.html"));
-    });
+  async function setupFrontendAndListen() {
+    if (process.env.NODE_ENV !== "production") {
+      const vite = await createViteServer({
+        server: { middlewareMode: true },
+        appType: "spa",
+      });
+      app.use(vite.middlewares);
+    } else {
+      const distPath = path.join(process.cwd(), "dist");
+      app.use(express.static(distPath));
+      app.get("*", (req, res) => {
+        res.sendFile(path.join(distPath, "index.html"));
+      });
+    }
+
+    // Only listen in non-Vercel environment
+    if (!process.env.VERCEL) {
+      app.listen(PORT, "0.0.0.0", () => {
+        console.log(`[PRD Spark Server] Running on http://0.0.0.0:${PORT} (${process.env.NODE_ENV || "development"} mode)`);
+      });
+    }
   }
 
-  app.listen(PORT, "0.0.0.0", () => {
-    console.log(`[PRD Spark Server] Running on http://0.0.0.0:${PORT} (${process.env.NODE_ENV || "development"} mode)`);
-  });
-}
+  setupFrontendAndListen();
 
-startServer();
+export default app;
