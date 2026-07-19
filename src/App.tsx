@@ -27,7 +27,8 @@ import {
   AlertTriangle
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-import { 
+import DOMPurify from "dompurify";
+import {
   collection, 
   doc, 
   setDoc, 
@@ -876,11 +877,15 @@ export default function App() {
         // handle inline code
         lineHTML = lineHTML.replace(/`(.*?)`/g, '<code class="bg-slate-100 dark:bg-slate-800 text-blue-600 dark:text-blue-400 px-1.5 py-0.5 rounded text-xs font-mono">$1</code>');
 
+        // lineHTML originates from AI-generated PRD content (/api/generate-prd) stored in
+        // Firestore and shared with other users via `?id=` links, so sanitize before render.
+        const safeLineHTML = DOMPurify.sanitize(lineHTML, { ALLOWED_TAGS: ["strong", "code"], ALLOWED_ATTR: ["class"] });
+
         return (
-          <p 
-            key={idx} 
+          <p
+            key={idx}
             className="text-sm md:text-base text-slate-700 dark:text-slate-300 my-2 leading-relaxed whitespace-pre-wrap font-serif"
-            dangerouslySetInnerHTML={{ __html: lineHTML }}
+            dangerouslySetInnerHTML={{ __html: safeLineHTML }}
           />
         );
       }
